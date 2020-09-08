@@ -37,16 +37,14 @@ router.post(
     const user = User.build({ email, password });
     await user.save();
 
-    // Generate JWT
-    const userJwt = jwt.sign(
-      {
-        id: user.id,
-        email: user.email
-      },
-      'asdf'
-    );
-
-    // Store it on session object
+    //Generate JWT
+    const userJwt = jwt.sign({
+      id: user.id,
+      email: user.email
+    }, process.env.JWT_KEY!); //the exclamation mark says to typescript don't worry 
+                              //we verified the undefined case and the variable is defined
+ 
+    //store it on session object
     req.session = {
       jwt: userJwt
     };

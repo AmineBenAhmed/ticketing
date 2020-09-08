@@ -35,6 +35,11 @@ app.all('*', async (req, res) => {
 app.use(errorHandler);
 
 const start = async () => {
+  if (!process.env.JWT_KEY) { //JWT_KEY verification ==> the process.env in typeScript is either 
+    //'undefined' or 'string' and if we make this check typescript excluede the undefined 
+    //type and will expect string type and will not appear an error 
+    throw new Error('JWT_KEY must be defined');
+  }
   try {
   await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', {
     useNewUrlParser: true,

@@ -30,7 +30,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   }
-});
+},
+  { // schema options
+    toJSON: { //the 'ret' is the returned value from tranform function in toJSON object is mongooseSchema options
+      transform(doc, ret) { //transfom taken from DocumentToObjectOptions interface
+        ret.id = ret._id //here we will transform the _id to id
+        delete ret._id
+        delete ret.password;// this will delete password from returned data 
+        delete ret.__v;
+      }
+    }, //this is not the best approach to make these changes but is the easiest one
+  }
+);
 
 userSchema.pre('save', async function(done) {
   if (this.isModified('password')) {
@@ -38,7 +49,9 @@ userSchema.pre('save', async function(done) {
     this.set('password', hashed);
   }
   done();
-});
+},
+
+);
 
 userSchema.statics.build = (attrs: UserAttrs) => {
   return new User(attrs);
