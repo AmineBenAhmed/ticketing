@@ -30,18 +30,20 @@ async (req: Request, res: Response) => {
   // } 
 
   const { email, password } = req.body;
-
+  
   const existingUser = await User.findOne({ email });
   if (!existingUser) {
     throw new BadRequestError('Invalid credentials');
   }
 
-  const passwordMatch = Password.compare(existingUser.password, password);
+  const passwordMatch = await Password.compare(existingUser.password, password);
 
-  if (!passwordMatch) throw new BadRequestError('Invalid credentiels');
+  if (!passwordMatch) {
+    throw new BadRequestError('Invalid credentiels');
+  }
 
    //Generate JWT
-   const userJwt = jwt.sign({
+  const userJwt = jwt.sign({
     id: existingUser.id,
     email: existingUser.email
   }, process.env.JWT_KEY!);  //the process.env has two acceptable types either strin 
@@ -53,7 +55,7 @@ async (req: Request, res: Response) => {
     jwt: userJwt
   };
 
-  res.status(201).send(existingUser);
+  res.status(200).send(existingUser);
 
 });
 
