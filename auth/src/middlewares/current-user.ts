@@ -18,7 +18,9 @@ export const currentUser = (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.session?.jwt) {
+  if (!req.session?.jwt) { //we added ? after session because session has two possible 
+                           //types string or undefined we use the ? to tell typeScript 
+                           //we has verified the req.session
     return next();
   }
 
