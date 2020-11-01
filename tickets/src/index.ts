@@ -7,10 +7,10 @@ const start = async () => {
     //type and will expect string type and will not appear an error 
     throw new Error('JWT_KEY must be defined');
   }
-  if(!process.env.MONGO_URI) {
-    throw new Error('MONGO_URI must be defined!')
+  if (!process.env.MONGO_URI) {
+    throw new Error('MONGO_URI must be dedfined');
   }
- 
+
 
   try {
   await mongoose.connect(process.env.MONGO_URI, {
