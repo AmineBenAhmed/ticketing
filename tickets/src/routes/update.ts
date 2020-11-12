@@ -31,7 +31,7 @@ async (req: Request, res: Response) => {
   }
 
   if (ticket.userId !== req.currentUser!.id) {
-    throw new NotAuthorizedError()
+    throw new NotAuthorizedError();
   }
 
   ticket.set({//set ticket new props
