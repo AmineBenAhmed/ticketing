@@ -11,7 +11,7 @@ export abstract class Listener<T extends Event> { //the type T extended from Eve
   abstract subject: T['subject'];//this makes subject of extended classes from Listener must be the same type of subject from Event type and this excludes errors
   abstract onMessage(data: T['data'], msg: Message): void;
   abstract queueGroupName: string;
-  private client: Stan;
+  protected client: Stan;
   protected ackWait = 5 * 1000;
 
   constructor(client: Stan) {
