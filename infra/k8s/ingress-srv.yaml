@@ -18,6 +18,10 @@ spec:
             backend:
               serviceName: tickets-srv
               servicePort: 3000
+          - path: /api/orders/?(.*)
+            backend:
+              serviceName: orders-srv
+              servicePort: 3000
           - path: /?(.*) #it must be the last route because all above routes are valid for it 
             backend:
               serviceName: client-srv

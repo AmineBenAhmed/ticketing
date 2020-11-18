@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 interface TicketAttrs {
   title: string; // the "string" type with lower case is reserved only for typescript
@@ -10,6 +11,7 @@ interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
   userId: string;
+  version: number
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -37,6 +39,9 @@ const ticketSchema = new mongoose.Schema({
     }
   }
 });
+
+ticketSchema.set('versionKey', 'version');
+ticketSchema.plugin(updateIfCurrentPlugin)
 
 //build the shcema
 ticketSchema.statics.build = (attrs: TicketAttrs) => {

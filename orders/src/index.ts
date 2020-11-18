@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 
 import { app } from './app';
+import { TicketCreatedListener } from './events/listeners/ticket-created-listener';
+import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener';
 import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
@@ -41,7 +43,8 @@ const start = async () => {
   process.on('SIGINT', () => natsWrapper.client.close());//when program retarted it fires the close event and execute the process.exit() ti terminate process now
   process.on('SIGTERM', () => natsWrapper.client.close());//this when program is closed the program is closed immediately
 
-
+  new TicketCreatedListener(natsWrapper.client).listen();
+  new TicketUpdatedListener(natsWrapper.client).listen();
 
   await mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
