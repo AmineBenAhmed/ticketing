@@ -27,6 +27,7 @@ async (req: Request, res: Response) => {
   //publish an event to say this order is canceled
   new OrderCancelledPublisher(natsWrapper.client).publish({
     id: order.id,
+    version: order.version,
     ticket: {
       id: order.ticket.id,
     }

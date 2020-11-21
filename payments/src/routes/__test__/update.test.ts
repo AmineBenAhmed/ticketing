@@ -2,7 +2,7 @@ import request from 'supertest';
 import mongoose from 'mongoose';
 
 import { app } from '../../app';
-import { Ticket } from '../../models/ticket';
+import { Order } from '../../models/order';
 import { natsWrapper } from '../../nats-wrapper';
 
 
@@ -72,7 +72,7 @@ it('returns a 400 if the user provides an invalid title or price', async () => {
     .put(`/api/tickets/${response.body.id}`)
     .set('Cookie', cookie)
     .send({
-      title: 'someTicket',
+      title: 'someOrder',
       price: -85
     })
     .expect(400)
@@ -144,7 +144,7 @@ it('rejects an error if ticket is reserved', async () => {
       price: 120
     });
 
-    const ticket = await Ticket.findById(response.body.id);
+    const ticket = await Order.findById(response.body.id);
     ticket!.set({ orderId: mongoose.Types.ObjectId().toHexString() });
     await ticket!.save();
 
