@@ -3,11 +3,12 @@ import { useState } from 'react';
 
 export default ({ url, method, body, onSuccess }) => {
   const [errors, setErrors] = useState(null);
-
-  const doRequest = async () => {
+  const doRequest = async (props = {}) => {
     try {
-      const response = await axios[method](url, body);
-
+      const response = await axios[method](url,
+        { ...body, ...props }
+        );
+      
       if (onSuccess) { //here we check if onSuccess callbeck is provided f provided we return callback
         onSuccess(response.data); //we will excute now the callback
       }
@@ -17,7 +18,7 @@ export default ({ url, method, body, onSuccess }) => {
       setErrors(<div className='alert alert-danger'>
         <h4>Ooops...</h4>
         <ul className='my-0'>
-          {err && err.response.data.errors.map(err => <li key={err.message}>{err.message}</li>)}
+          {err && err.response && err.response.data && err.response.data.errors && err.response.data.errors.map(err => <li key={err.message}>{err.message}</li>)}
         </ul>
       </div>);
      // throw err;

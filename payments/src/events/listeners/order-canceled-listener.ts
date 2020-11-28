@@ -1,8 +1,6 @@
 import { Listener, OrderCancelledEvent, OrderStatus, Subjects } from "@ticketingproj/common";
 import { Message } from 'node-nats-streaming';
 import { Order } from "../../models/order";
-import { TicketCreatedPublisher } from "../publishers/ticket-created-publisher";
-import { TicketUpdatedPublisher } from "../publishers/ticket-updated-publisher";
 import { queueGroupName } from "./queue-group-name";
 
 export class OrderCancelledListener extends Listener<OrderCancelledEvent> {

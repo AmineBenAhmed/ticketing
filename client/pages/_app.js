@@ -7,7 +7,9 @@ const AppComponent =  ({Component, pageProps }) => {
   return (
     <div>
       <Header currentUser={pageProps.currentUser} />
+      <div className='container'>
       <Component {...pageProps} />
+      </div>
     </div>
   )
 }
@@ -19,7 +21,7 @@ const AppComponent =  ({Component, pageProps }) => {
 AppComponent.getInitialProps = async (context) => { //the getServerSideProps method get data from server before rendering the page
   // Fetch currentuser data from auth service
   const pageProps = {};
-  const client = buildClient(context.ctx)
+  const client = buildClient(context.ctx);
   const { data } = await client.get('/api/users/currentuser');
   pageProps.currentUser = data.currentUser;
 
