@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 import { app } from './app'
 
 const start = async () => {
+  console.log('starting up...');
+  
   if (!process.env.JWT_KEY) { //JWT_KEY verification ==> the process.env in typeScript is either 
     //'undefined' or 'string' and if we make this check typescript excluede the undefined 
     //type and will expect string type and will not appear an error 
