@@ -29,7 +29,7 @@ const setup = async () => {
       id: ticket.id
     }
   };
-
+   //
   //@ts-ignore
   const msg: Message = {
     ack: jest.fn()
