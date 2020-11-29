@@ -11,8 +11,8 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
   async onMessage(data: OrderCancelledEvent['data'], msg: Message) {
 
   const order = await Order.findOne({ // we must use "findOne" and not "find" because the "findOne" return a single document and after we can use for it "set()" or "save()" hooks and all other single doc hooks, minwhile "find returns an array"
-    _id: data.id,                     //another thing somtimes we can retreive the order when is in update can retreive more than single doc in update we can have at the same time order with two status before is updated
-    version: data.version - 1  //we need the version because if we retreive the order in an intermidiate time of update of the order wa can not retreive the asked order
+    id: data.id,                     //another thing somtimes we can retreive the order when is in update can retreive more than single doc in update we can have at the same time order with two status before is updated
+    version: data.version - 1,  //we need the version because if we retreive the order in an intermidiate time of update of the order we can not retreive the asked order
   });
 
   if(!order) {

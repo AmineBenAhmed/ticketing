@@ -9,13 +9,17 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
   queueGroupName = queueGroupName;
 
   async onMessage(data: OrderCreatedEvent['data'], msg: Message) {
-    const delay = new Date(data.expiresAt).getTime() - new Date().getTime()
-    await expirationQueue.add({ //create a new job if order:created event published and the job have orderId as param
+    const delay = new Date(data.expiresAt).getTime() - new Date().getTime();
+    console.log('Waiting this many milliseconds to process the job:', delay);
+    
+    await expirationQueue.add(
+    { //create a new job if order:created event published and the job have orderId as param
       orderId: data.id
     },
     {
       delay,
-    });
+    }
+    );
     msg.ack();
   }
 } 
