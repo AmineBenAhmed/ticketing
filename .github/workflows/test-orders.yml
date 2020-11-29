@@ -1,7 +1,9 @@
 name: tests-orders
 
 on:
-  push
+  push:
+    paths:
+      - 'orders/**'
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -1,51 +1,52 @@
-import { OrderCancelledEvent, OrderStatus } from '@ticketingproj/common';
 import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';
-
+import { OrderStatus, OrderCancelledEvent } from '@ticketingproj/common';
+import { natsWrapper } from '../../../nats-wrapper';
 import { Order } from '../../../models/order';
-
-import { natsWrapper } from "../../../nats-wrapper"
-import { OrderCancelledListener } from "../order-canceled-listener"
+import { OrderCancelledListener } from '../order-canceled-listener';
 
 const setup = async () => {
-  const listener = new OrderCancelledListener(natsWrapper.client);
+  const listener = new OrderCancelledListener (natsWrapper.client);
 
-  const orderId = mongoose.Types.ObjectId().toHexString();
   const order = Order.build({
-    id:  mongoose.Types.ObjectId().toHexString(),
+    id: mongoose.Types.ObjectId().toHexString(),
     status: OrderStatus.Created,
-    userId: 'zdzdzd',
+    price: 10,
+    userId: 'asldkfj',
     version: 0,
-    price: 22
   });
-
   await order.save();
-
 
   const data: OrderCancelledEvent['data'] = {
     id: order.id,
     version: 1,
     ticket: {
-      id: 'eferfef'
-    }
+      id: 'asldkfj',
+    },
   };
 
-  //@ts-ignore
+  // @ts-ignore
   const msg: Message = {
-    ack: jest.fn()
-  }
+    ack: jest.fn(),
+  };
 
-  return { msg, data, listener, order }
+  return { listener, data, msg, order };
 };
 
-it('updates the status of the order and acks the message', async () => {
-  const { msg, data, listener, order } = await setup();
+it('updates the status of the order', async () => {
+  const { listener, data, msg, order } = await setup();
 
   await listener.onMessage(data, msg);
 
   const updatedOrder = await Order.findById(order.id);
 
   expect(updatedOrder!.status).toEqual(OrderStatus.Canceled);
-  expect(msg.ack).toHaveBeenCalled();
 });
 
+it('acks the message', async () => {
+  const { listener, data, msg, order } = await setup();
+
+  await listener.onMessage(data, msg);
+
+  expect(msg.ack).toHaveBeenCalled();
+});
